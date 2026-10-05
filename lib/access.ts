@@ -1,0 +1,3 @@
+import {getChatGPTUser} from '@/app/chatgpt-auth';import {registered} from '@/db/data';
+export async function access(role='viewer'){const user=await getChatGPTUser();if(!user)return {error:Response.json({error:'Sign in with ChatGPT first.'},{status:401})};const member=await registered(user.userId);if(!member)return {error:Response.json({error:'Register for the consortium workspace first.'},{status:403})};if(role==='editor'&&!['editor','admin'].includes(member.role))return {error:Response.json({error:'Editor access required.'},{status:403})};return {user,member};}
+export function sameOrigin(req:Request){const origin=req.headers.get('origin');return !origin||origin===new URL(req.url).origin;}

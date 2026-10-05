@@ -1,0 +1,2 @@
+import {refreshCarbon} from '@/db/data';import {access,sameOrigin} from '@/lib/access';
+export async function POST(req:Request){if(!sameOrigin(req))return new Response('Forbidden',{status:403});const a=await access('editor');if(a.error)return a.error;try{const b:any=await req.json();return Response.json(await refreshCarbon(b.simulateFailure===true))}catch(e){return Response.json({error:String(e),retained:true},{status:502})}}

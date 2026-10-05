@@ -1,0 +1,2 @@
+import {db} from '@/db/data';import {access,sameOrigin} from '@/lib/access';import {validInputs} from '@/lib/model';
+export async function POST(req:Request){if(!sameOrigin(req))return new Response('Forbidden',{status:403});const a=await access('editor');if(a.error)return a.error;try{const values=validInputs(await req.json());await db().prepare('UPDATE designs SET assumptions=?,updated_at=? WHERE id=1').bind(JSON.stringify(values),new Date().toISOString()).run();return Response.json({ok:true})}catch(e){return Response.json({error:String(e)},{status:400})}}

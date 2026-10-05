@@ -1,0 +1,2 @@
+import {getState,registered} from '@/db/data';import {getChatGPTUser} from '@/app/chatgpt-auth';import {env} from 'cloudflare:workers';
+export async function GET(){try{const user=await getChatGPTUser();const state=await getState();return Response.json({...state,user:user?{name:user.displayName,member:await registered(user.userId)}:null,aiReady:Boolean((env as any).OPENAI_API_KEY)},{headers:{'Cache-Control':'no-store'}})}catch(e){console.error(e);return Response.json({error:'The evidence database is unavailable. Please retry.'},{status:503})}}
